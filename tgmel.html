@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة محل أدوات التجميل</title>
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f0f4ff 0%, #fdf2f8 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 55px;
+            height: 55px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .header-date {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Main Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 968px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid var(--border);
+            background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: var(--light);
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #db2777;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        th {
+            padding: 14px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #faf5ff;
+            cursor: pointer;
+        }
+
+        .total-row {
+            background: #fef3c7;
+            font-weight: 700;
+            font-size: 14px;
+            border-top: 3px solid var(--warning);
+        }
+
+        /* Clients */
+        .clients-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .client-chip {
+            background: white;
+            border: 2px solid var(--primary-light);
+            padding: 8px 15px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .client-chip:hover {
+            background: #faf5ff;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .client-remove {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .client-remove:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        /* Invoice */
+        .invoice-preview {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 15px;
+            border: 2px dashed var(--border);
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .invoice-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .invoice-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .invoice-info {
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .invoice-items {
+            margin-bottom: 20px;
+        }
+
+        .invoice-totals {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 16px;
+            border-top: 3px solid var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-left {
+                flex-direction: column;
+            }
+            
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-body {
+                padding: 15px;
+            }
+            
+            .invoice-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div class="logo">💄</div>
+                <div class="header-title">
+                    <h1>نظام إدارة محل التجميل</h1>
+                    <p>نظام متكامل لإدارة المبيعات والمشتريات والديون</p>
+                </div>
+            </div>
+            <div class="header-date" id="currentDate"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-card fade-in">
+                <div class="stat-header">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-label">إجمالي المنتجات</div>
+                </div>
+                <div class="stat-value" id="statProducts">0</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-header">
+                    <div class="stat-icon">🏪</div>
+                    <div class="stat-label">قيمة المخزون</div>
+                </div>
+                <div class="stat-value" id="statInventory">0 ر.س</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-header">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-label">عدد العملاء</div>
+                </div>
+                <div class="stat-value" id="statClients">0</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-header">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-label">إجمالي الديون</div>
+                </div>
+                <div class="stat-value" id="statDebts">0 ر.س</div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Products Management -->
+            <div class="card fade-in">
+                <div class="card-header">
+                    <div class="card-title">📦 إدارة المنتجات</div>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label">اسم المنتج *</label>
+                        <input type="text" id="productName" class="form-input" placeholder="مثال: أحمر شفاه">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">الفئة</label>
+                            <select id="productCategory" class="form-select">
+                                <option value="مكياج">مكياج</option>
+                                <option value="عناية بالبشرة">عناية بالبشرة</option>
+                                <option value="عناية بالشعر">عناية بالشعر</option>
+                                <option value="عطور">عطور</option>
+                                <option value="أدوات تجميل">أدوات تجميل</option>
+                                <option value="أخرى">أخرى</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">سعر الشراء (ر.س)</label>
+                            <input type="number" id="purchasePrice" class="form-input" min="0" step="0.01" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">سعر البيع (ر.س)</label>
+                            <input type="number" id="salePrice" class="form-input" min="0" step="0.01" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">الكمية</label>
+                            <input type="number" id="productQuantity" class="form-input" min="0" placeholder="0">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-full" onclick="addProduct()">➕ إضافة المنتج</button>
+
+                    <div class="table-container" style="margin-top: 20px;">
+                        <table id="productsTable">
+                            <thead>
+                                <tr>
+                                    <th>المنتج</th>
+                                    <th>الفئة</th>
+                                    <th>الشراء</th>
+                                    <th>البيع</th>
+                                    <th>الكمية</th>
+                                    <th>الإجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsBody">
+                                <!-- Products will be added here -->
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td colspan="3">الإجمالي</td>
+                                    <td id="totalSalePrice">0</td>
+                                    <td id="totalQuantity">0</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales & Invoice -->
+            <div class="card fade-in">
+                <div class="card-header">
+                    <div class="card-title">🛒 إنشاء فاتورة بيع</div>
+                </div>
+                <div class="card-body">
+                    <!-- Client Management -->
+                    <div class="form-group">
+                        <label class="form-label">إدارة العملاء</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="clientName" class="form-input" placeholder="اسم العميل الجديد">
+                            <button class="btn btn-secondary" onclick="addClient()">إضافة</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">اختر العميل للفاتورة</label>
+                        <select id="clientSelect" class="form-select">
+                            <option value="">-- اختر العميل --</option>
+                        </select>
+                    </div>
+                    <div class="clients-list" id="clientsList"></div>
+
+                    <!-- Invoice Items -->
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label class="form-label">إضافة منتج للفاتورة</label>
+                        <div class="form-row">
+                            <select id="invoiceProduct" class="form-select">
+                                <option value="">-- اختر المنتج --</option>
+                            </select>
+                            <input type="number" id="invoiceQuantity" class="form-input" min="1" placeholder="الكمية" value="1">
+                        </div>
+                        <button class="btn btn-success btn-full" style="margin-top: 10px;" onclick="addToInvoice()">➕ إضافة للفاتورة</button>
+                    </div>
+
+                    <!-- Invoice Preview -->
+                    <div class="invoice-preview" id="invoicePreview">
+                        <div class="invoice-header">
+                            <div class="invoice-title">فاتورة بيع</div>
+                            <div style="font-size: 12px; color: var(--gray);" id="invoiceNumber">رقم الفاتورة: INV-001</div>
+                        </div>
+                        <div class="invoice-details">
+                            <div class="invoice-info">
+                                <strong>العميل:</strong> <span id="invoiceClient">-</span><br>
+                                <strong>التاريخ:</strong> <span id="invoiceDate">-</span>
+                            </div>
+                        </div>
+                        <div class="invoice-items">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>المنتج</th>
+                                        <th>الكمية</th>
+                                        <th>السعر</th>
+                                        <th>الإجمالي</th>
+                                        <th>حذف</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoiceBody">
+                                    <!-- Invoice items will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="invoice-totals">
+                            <span>الإجمالي الكلي:</span>
+                            <span id="invoiceTotal">0 ر.س</span>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="btn btn-success btn-full" onclick="completeSale()">✅ إتمام البيع</button>
+                            <button class="btn btn-danger btn-full" onclick="clearInvoice()">🗑️ مسح الفاتورة</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debts Section -->
+        <div class="card fade-in" style="margin-top: 25px;">
+            <div class="card-header">
+                <div class="card-title">📊 إدارة الديون</div>
+            </div>
+            <div class="card-body">
+                <div class="table-container">
+                    <table id="debtsTable">
+                        <thead>
+                            <tr>
+                                <th>العميل</th>
+                                <th>إجمالي المشتريات</th>
+                                <th>المدفوع</th>
+                                <th>المتبقي (الدين)</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="debtsBody">
+                            <!-- Debts will be shown here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        let products = [];
+        let clients = [];
+        let invoiceItems = [];
+        let debts = [];
+        let productIdCounter = 1;
+        let clientIdCounter = 1;
+        let invoiceCounter = 1;
+
+        // Initialize with default data (realistic examples)
+        function initializeData() {
+            // Add default products (realistic examples)
+            const defaultProducts = [
+                { id: productIdCounter++, name: 'أحمر شفاه مات', category: 'مكياج', purchasePrice: 25, salePrice: 50, quantity: 20 },
+                { id: productIdCounter++, name: 'كريم أساس', category: 'مكياج', purchasePrice: 40, salePrice: 80, quantity: 15 },
+                { id: productIdCounter++, name: 'شامبو طبيعي', category: 'عناية بالشعر', purchasePrice: 15, salePrice: 35, quantity: 30 },
+                { id: productIdCounter++, name: 'ماسك للوجه', category: 'عناية بالبشرة', purchasePrice: 20, salePrice: 45, quantity: 25 },
+                { id: productIdCounter++, name: 'عطر وردي', category: 'عطور', purchasePrice: 60, salePrice: 120, quantity: 10 },
+            ];
+            products.push(...defaultProducts);
+
+            // Add default clients (realistic examples)
+            const defaultClients = [
+                { id: clientIdCounter++, name: 'أحمد محمد', phone: '0501234567' },
+                { id: clientIdCounter++, name: 'سارة عبدالله', phone: '0557654321' },
+                { id: clientIdCounter++, name: 'نورة علي', phone: '0569876543' },
+            ];
+            clients.push(...defaultClients);
+        }
+
+        // Update current date
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('ar-SA', options);
+        }
+
+        // Add Product
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
+            const salePrice = parseFloat(document.getElementById('salePrice').value);
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+
+            if (!name) {
+                alert('يرجى إدخال اسم المنتج');
+                return;
+            }
+
+            if (isNaN(purchasePrice) || isNaN(salePrice) || isNaN(quantity)) {
+                alert('يرجى إدخال قيم صحيحة للأسعار والكمية');
+                return;
+            }
+
+            const product = {
+                id: productIdCounter++,
+                name: name,
+                category: category,
+                purchasePrice: purchasePrice,
+                salePrice: salePrice,
+                quantity: quantity
+            };
+
+            products.push(product);
+            updateProductsTable();
+            updateInvoiceProductSelect();
+            updateStats();
+            clearProductForm();
+        }
+
+        // Delete Product
+        function deleteProduct(id) {
+            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
+                products = products.filter(p => p.id !== id);
+                updateProductsTable();
+                updateInvoiceProductSelect();
+                updateStats();
+            }
+        }
+
+        // Add Client
+        function addClient() {
+            const name = document.getElementById('clientName').value.trim();
+            
+            if (!name) {
+                alert('يرجى إدخال اسم العميل');
+                return;
+            }
+
+            const client = {
+                id: clientIdCounter++,
+                name: name,
+                phone: ''
+            };
+
+            clients.push(client);
+            updateClientsList();
+            updateClientSelect();
+            updateStats();
+            document.getElementById('clientName').value = '';
+        }
+
+        // Remove Client
+        function removeClient(id) {
+            if (confirm('هل أنت متأكد من حذف هذا العميل؟')) {
+                clients = clients.filter(c => c.id !== id);
+                updateClientsList();
+                updateClientSelect();
+                updateStats();
+            }
+        }
+
+        // Add to Invoice
+        function addToInvoice() {
+            const productId = parseInt(document.getElementById('invoiceProduct').value);
+            const quantity = parseInt(document.getElementById('invoiceQuantity').value);
+
+            if (!productId) {
+                alert('يرجى اختيار منتج');
+                return;
+            }
+
+            if (isNaN(quantity) || quantity < 1) {
+                alert('يرجى إدخال كمية صحيحة');
+                return;
+            }
+
+            const product = products.find(p => p.id === productId);
+            
+            if (!product) {
+                alert('المنتج غير موجود');
+                return;
+            }
+
+            if (quantity > product.quantity) {
+                alert('الكمية المطلوبة غير متوفرة في المخزون');
+                return;
+            }
+
+            const existingItem = invoiceItems.find(item => item.productId === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                invoiceItems.push({
+                    productId: productId,
+                    productName: product.name,
+                    quantity: quantity,
+                    price: product.salePrice,
+                    total: product.salePrice * quantity
+                });
+            }
+
+            updateInvoiceTable();
+            document.getElementById('invoiceQuantity').value = '1';
+        }
+
+        // Remove from Invoice
+        function removeFromInvoice(productId) {
+            invoiceItems = invoiceItems.filter(item => item.productId !== productId);
+            updateInvoiceTable();
+        }
+
+        // Complete Sale
+        function completeSale() {
+            const clientId = parseInt(document.getElementById('clientSelect').value);
+            
+            if (!clientId) {
+                alert('يرجى اختيار العميل');
+                return;
+            }
+
+            if (invoiceItems.length === 0) {
+                alert('لا توجد منتجات في الفاتورة');
+                return;
+            }
+
+            const client = clients.find(c => c.id === clientId);
+            const totalAmount = invoiceItems.reduce((sum, item) => sum + item.total, 0);
+
+            // Update product quantities
+            invoiceItems.forEach(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (product) {
+                    product.quantity -= item.quantity;
+                }
+            });
+
+            // Add to debts
+            const existingDebt = debts.find(d => d.clientId === clientId);
+            if (existingDebt) {
+                existingDebt.totalAmount += totalAmount;
+                existingDebt.remainingAmount += totalAmount;
+            } else {
+                debts.push({
+                    clientId: clientId,
+                    clientName: client.name,
+                    totalAmount: totalAmount,
+                    paidAmount: 0,
+                    remainingAmount: totalAmount
+                });
+            }
+
+            // Update all displays
+            updateProductsTable();
+            updateInvoiceProductSelect();
+            updateDebtsTable();
+            updateStats();
+            clearInvoice();
+            
+            alert(`تم إتمام البيع بنجاح!\nالإجمالي: ${totalAmount} ر.س\nالعميل: ${client.name}`);
+            invoiceCounter++;
+            document.getElementById('invoiceNumber').textContent = `رقم الفاتورة: INV-${String(invoiceCounter).padStart(3, '0')}`;
+        }
+
+        // Clear Invoice
+        function clearInvoice() {
+            invoiceItems = [];
+            document.getElementById('clientSelect').value = '';
+            updateInvoiceTable();
+        }
+
+        // Update Products Table
+        function updateProductsTable() {
+            const tbody = document.getElementById('productsBody');
+            tbody.innerHTML = '';
+            
+            products.forEach(product => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>${product.purchasePrice.toFixed(2)}</td>
+                    <td>${product.salePrice.toFixed(2)}</td>
+                    <td>${product.quantity}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteProduct(${product.id})">حذف</button>
+                    </td>
+                `;
+            });
+
+            // Update totals
+            const totalSale = products.reduce((sum, p) => sum + (p.salePrice * p.quantity), 0);
+            const totalQty = products.reduce((sum, p) => sum + p.quantity, 0);
+            document.getElementById('totalSalePrice').textContent = totalSale.toFixed(2);
+            document.getElementById('totalQuantity').textContent = totalQty;
+        }
+
+        // Update Clients List
+        function updateClientsList() {
+            const list = document.getElementById('clientsList');
+            list.innerHTML = '';
+            
+            clients.forEach(client => {
+                const chip = document.createElement('div');
+                chip.className = 'client-chip';
+                chip.innerHTML = `
+                    ${client.name}
+                    <button class="client-remove" onclick="removeClient(${client.id})">×</button>
+                `;
+                list.appendChild(chip);
+            });
+        }
+
+        // Update Client Select
+        function updateClientSelect() {
+            const select = document.getElementById('clientSelect');
+            select.innerHTML = '<option value="">-- اختر العميل --</option>';
+            
+            clients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.id;
+                option.textContent = client.name;
+                select.appendChild(option);
+            });
+        }
+
+        // Update Invoice Product Select
+        function updateInvoiceProductSelect() {
+            const select = document.getElementById('invoiceProduct');
+            select.innerHTML = '<option value="">-- اختر المنتج --</option>';
+            
+            products.forEach(product => {
+                if (product.quantity > 0) {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = `${product.name} - ${product.salePrice} ر.س (متوفر: ${product.quantity})`;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        // Update Invoice Table
+        function updateInvoiceTable() {
+            const tbody = document.getElementById('invoiceBody');
+            tbody.innerHTML = '';
+            
+            let total = 0;
+            invoiceItems.forEach(item => {
+                total += item.total;
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${item.productName}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price.toFixed(2)}</td>
+                    <td>${item.total.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="removeFromInvoice(${item.productId})">×</button>
+                    </td>
+                `;
+            });
+
+            document.getElementById('invoiceTotal').textContent = `${total.toFixed(2)} ر.س`;
+            
+            // Update client name in invoice
+            const clientId = parseInt(document.getElementById('clientSelect').value);
+            const client = clients.find(c => c.id === clientId);
+            document.getElementById('invoiceClient').textContent = client ? client.name : '-';
+            
+            // Update date
+            const now = new Date();
+            document.getElementById('invoiceDate').textContent = now.toLocaleDateString('ar-SA');
+        }
+
+        // Update Debts Table
+        function updateDebtsTable() {
+            const tbody = document.getElementById('debtsBody');
+            tbody.innerHTML = '';
+            
+            debts.forEach(debt => {
+                const status = debt.remainingAmount === 0 ? 'مسدد' : 'متبقي';
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${debt.clientName}</td>
+                    <td>${debt.totalAmount.toFixed(2)}</td>
+                    <td>${debt.paidAmount.toFixed(2)}</td>
+                    <td>${debt.remainingAmount.toFixed(2)}</td>
+                    <td>${status}</td>
+                `;
+            });
+        }
+
+        // Update Stats
+        function updateStats() {
+            document.getElementById('statProducts').textContent = products.length;
+            
+            const inventoryValue = products.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0);
+            document.getElementById('statInventory').textContent = `${inventoryValue.toFixed(2)} ر.س`;
+            
+            document.getElementById('statClients').textContent = clients.length;
+            
+            const totalDebts = debts.reduce((sum, d) => sum + d.remainingAmount, 0);
+            document.getElementById('statDebts').textContent = `${totalDebts.toFixed(2)} ر.س`;
+        }
+
+        // Clear Product Form
+        function clearProductForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('purchasePrice').value = '';
+            document.getElementById('salePrice').value = '';
+            document.getElementById('productQuantity').value = '';
+        }
+
+        // Event listeners for real-time invoice updates
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            updateDate();
+            updateProductsTable();
+            updateClientsList();
+            updateClientSelect();
+            updateInvoiceProductSelect();
+            updateInvoiceTable();
+            updateDebtsTable();
+            updateStats();
+            
+            // Update invoice when client changes
+            document.getElementById('clientSelect').addEventListener('change', updateInvoiceTable);
+        });
+
+        // Update date every minute
+        setInterval(updateDate, 60000);
+    </script>
+</body>
+</html>
