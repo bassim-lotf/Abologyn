@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة محطة الغاز</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --primary-light: #334155;
+            --accent: #d97706;
+            --accent-hover: #b45309;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        /* Sidebar Nav */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--accent);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item button {
+            width: 100%;
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-align: right;
+        }
+
+        .nav-item button:hover, .nav-item button.active {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--surface);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .header .date-badge {
+            background: var(--bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Tab Views */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Dashboard Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-right: 4px solid var(--accent);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Forms & Cards UI */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 1.25rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #1da851;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            text-align: right;
+        }
+
+        th, td {
+            padding: 0.85rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: var(--bg);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Directives & Tasks */
+        .directive-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: var(--radius);
+            margin-bottom: 0.75rem;
+        }
+
+        .directive-item.done {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+            .nav-list {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            .nav-item button {
+                white-space: nowrap;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="brand">
+            <span>⛽</span> محطة الغاز الذكية
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <button class="active" onclick="switchTab('dashboard')">📊 لوحة التحكم</button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('readings')">📝 قراءات العدادات</button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('pumps')">⚙️ إدارة الطرمبات</button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('workers')">👥 إدارة العمال</button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('directives')">📋 حافظة التوجيهات</button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('reports')">💬 تقارير واتساب</button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <header class="header">
+            <h1 id="page-title">لوحة التحكم والإحصائيات</h1>
+            <div class="date-badge" id="current-date">--/--/----</div>
+        </header>
+
+        <!-- 1. Dashboard Tab -->
+        <section id="tab-dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>إجمالي المبيعات (ريال)</h3>
+                    <div class="value" id="stat-total-sales">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>الكمية المباعة الإجمالية (لتر)</h3>
+                    <div class="value" id="stat-total-liters">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>عدد الطرمبات النشطة</h3>
+                    <div class="value" id="stat-pumps-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>عدد العمال المسجلين</h3>
+                    <div class="value" id="stat-workers-count">0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">آخر العمليات المسجلة</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>التاريخ والوقت</th>
+                                <th>العامل</th>
+                                <th>الطرمبة</th>
+                                <th>الكمية (لتر)</th>
+                                <th>المبلغ الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-readings-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Readings Tab -->
+        <section id="tab-readings" class="tab-content">
+            <div class="card">
+                <div class="card-title">تسجيل شيفت وقراءة عداد جديدة</div>
+                <form id="reading-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>اختر العامل</label>
+                            <select id="reading-worker-select" class="form-control" required onchange="onWorkerSelected()">
+                                <option value="">-- اختر عامل --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>الطرمبة المعينة</label>
+                            <input type="text" id="reading-pump-name" class="form-control" readonly placeholder="تحدد تلقائياً">
+                        </div>
+                        <div class="form-group">
+                            <label>قراءة البداية (العداد)</label>
+                            <input type="number" id="reading-start" class="form-control" step="0.01" readonly placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>قراءة النهاية (العداد)</label>
+                            <input type="number" id="reading-end" class="form-control" step="0.01" required placeholder="أدخل القراءة الحالية" oninput="calculateShiftTotals()">
+                        </div>
+                        <div class="form-group">
+                            <label>سعر اللتر/الوحدة</label>
+                            <input type="number" id="reading-price" class="form-control" step="0.01" readonly placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>الكمية المستهلكة (لتر)</label>
+                            <input type="number" id="reading-liters" class="form-control" readonly placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>المبلغ المستحق الإجمالي</label>
+                            <input type="number" id="reading-total" class="form-control" readonly placeholder="0" style="font-weight:bold; color:var(--accent);">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">حفظ قراءة الشيفت</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-title">سجل القراءات السابق</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>التاريخ والوقت</th>
+                                <th>العامل</th>
+                                <th>الطرمبة</th>
+                                <th>قراءة البداية</th>
+                                <th>قراءة النهاية</th>
+                                <th>الكمية (لتر)</th>
+                                <th>السعر/لتر</th>
+                                <th>الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="readings-history-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Pumps Tab -->
+        <section id="tab-pumps" class="tab-content">
+            <div class="card">
+                <div class="card-title">إضافة / تعديل طرمبة</div>
+                <form id="pump-form">
+                    <input type="hidden" id="pump-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>اسم / رقم الطرمبة</label>
+                            <input type="text" id="pump-name" class="form-control" placeholder="مثال: طرمبة 1 - غاز ممتاز" required>
+                        </div>
+                        <div class="form-group">
+                            <label>نوع الوقود/الغاز</label>
+                            <input type="text" id="pump-type" class="form-control" placeholder="مثال: غاز مسال / ممتاز" required>
+                        </div>
+                        <div class="form-group">
+                            <label>قراءة العداد الحالية</label>
+                            <input type="number" id="pump-reading" class="form-control" step="0.01" placeholder="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>سعر البيع لكل لتر/وحدة</label>
+                            <input type="number" id="pump-price" class="form-control" step="0.01" placeholder="0" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">حفظ بيانات الطرمبة</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-title">قائمة الطرمبات</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم الطرمبة</th>
+                                <th>النوع</th>
+                                <th>القراءة الحالية</th>
+                                <th>سعر اللتر</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pumps-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Workers Tab -->
+        <section id="tab-workers" class="tab-content">
+            <div class="card">
+                <div class="card-title">إضافة / تعديل عامل</div>
+                <form id="worker-form">
+                    <input type="hidden" id="worker-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>اسم العامل الثلاثي</label>
+                            <input type="text" id="worker-name" class="form-control" placeholder="مثال: أحمد محمد علي" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهاتف</label>
+                            <input type="tel" id="worker-phone" class="form-control" placeholder="مثال: 770000000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>تعيين طرمبة خاصة (طرمبة واحدة لكل عامل)</label>
+                            <select id="worker-pump-select" class="form-control" required>
+                                <option value="">-- اختر طرمبة --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">حفظ بيانات العامل</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-title">قائمة العمال والمبيعات</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم العامل</th>
+                                <th>رقم الهاتف</th>
+                                <th>الطرمبة المعينة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="workers-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Directives Tab -->
+        <section id="tab-directives" class="tab-content">
+            <div class="card">
+                <div class="card-title">إضافة توجيه / تعليمات جديدة للعمال</div>
+                <form id="directive-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>موجّه إلى (العامل)</label>
+                            <select id="directive-worker-select" class="form-control">
+                                <option value="ALL">جميع العمال</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>نص التوجيه / التعليمات</label>
+                            <input type="text" id="directive-text" class="form-control" placeholder="مثال: يرجى فحص محابس الأمان عند الاستلام" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">إضافة التوجيه</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-title">قائمة التوجيهات الحالية</div>
+                <div id="directives-list"></div>
+            </div>
+        </section>
+
+        <!-- 6. WhatsApp Reports Tab -->
+        <section id="tab-reports" class="tab-content">
+            <div class="card">
+                <div class="card-title">توليد تقرير شفت وإرساله عبر واتساب</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>اختر العامل المراد إرسال تقريره</label>
+                        <select id="report-worker-select" class="form-control" onchange="generateWhatsAppReportText()">
+                            <option value="">-- اختر عامل --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>معاينة نص التقرير (جاهز للإرسال)</label>
+                    <textarea id="whatsapp-preview" class="form-control" rows="10" readonly style="font-family: monospace; background: var(--bg);"></textarea>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <button onclick="sendToWhatsApp()" class="btn btn-whatsapp">
+                        <span>📲 إرسال المبيعات والتوجيهات عبر واتساب</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- System State & Database Initialization ---
+        const DB_KEY = 'gas_station_db_v1';
+
+        let appData = {
+            pumps: [
+                { id: '1', name: 'طرمبة 1 - غاز ممتاز', type: 'غاز مسال', currentReading: 1500, pricePerLiter: 250 },
+                { id: '2', name: 'طرمبة 2 - غاز عادي', type: 'غاز عادي', currentReading: 3200, pricePerLiter: 220 }
+            ],
+            workers: [
+                { id: '1', name: 'أحمد محمود السعيد', phone: '967770000000', pumpId: '1' }
+            ],
+            readings: [],
+            directives: [
+                { id: '1', workerId: 'ALL', text: 'التأكد من التزام معايير السلامة وإطفاء المحركات عند التعبئة', done: false, date: new Date().toLocaleDateString('ar-EG') }
+            ]
+        };
+
+        // Load / Save LocalStorage Functions
+        function loadStorage() {
+            const stored = localStorage.getItem(DB_KEY);
+            if (stored) {
+                try {
+                    appData = JSON.parse(stored);
+                } catch (e) {
+                    console.error("Failed to parse storage", e);
+                }
+            } else {
+                saveStorage();
+            }
+        }
+
+        function saveStorage() {
+            localStorage.setItem(DB_KEY, JSON.stringify(appData));
+            updateDashboardStats();
+        }
+
+        // --- Navigation ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item button').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            
+            // Activate button
+            const activeBtn = Array.from(document.querySelectorAll('.nav-item button'))
+                .find(btn => btn.getAttribute('onclick').includes(tabId));
+            if (activeBtn) activeBtn.classList.add('active');
+
+            // Update Page Title
+            const titles = {
+                'dashboard': 'لوحة التحكم والإحصائيات',
+                'readings': 'تسجيل قراءات العدادات والشيفتات',
+                'pumps': 'إدارة طرمبات المحطة',
+                'workers': 'إدارة العمال وتعيين الطرمبات',
+                'directives': 'حافظة توجيهات وتعليمات العمال',
+                'reports': 'تقارير واتساب اليومية'
+            };
+            document.getElementById('page-title').innerText = titles[tabId] || 'نظام إدارة محطة الغاز';
+
+            // Refresh view dynamic inputs
+            refreshAllDropdowns();
+            renderPumpsTable();
+            renderWorkersTable();
+            renderReadingsHistory();
+            renderDirectives();
+            updateDashboardStats();
+        }
+
+        // --- Render Functions ---
+
+        // Refresh Dropdowns across the app
+        function refreshAllDropdowns() {
+            // Populate worker selects
+            const workerSelects = ['reading-worker-select', 'directive-worker-select', 'report-worker-select'];
+            workerSelects.forEach(id => {
+                const select = document.getElementById(id);
+                if (!select) return;
+                const currentVal = select.value;
+                
+                let html = id === 'directive-worker-select' ? '<option value="ALL">جميع العمال</option>' : '<option value="">-- اختر عامل --</option>';
+                appData.workers.forEach(w => {
+                    const pump = appData.pumps.find(p => p.id === w.pumpId);
+                    const pumpName = pump ? `(${pump.name})` : '(بدون طرمبة)';
+                    html += `<option value="${w.id}">${w.name} ${pumpName}</option>`;
+                });
+                select.innerHTML = html;
+                select.value = currentVal;
+            });
+
+            // Populate pump select for worker form
+            const workerPumpSelect = document.getElementById('worker-pump-select');
+            if (workerPumpSelect) {
+                let html = '<option value="">-- اختر طرمبة --</option>';
+                appData.pumps.forEach(p => {
+                    html += `<option value="${p.id}">${p.name}</option>`;
+                });
+                workerPumpSelect.innerHTML = html;
+            }
+        }
+
+        // Dashboard Stats
+        function updateDashboardStats() {
+            let totalSales = 0;
+            let totalLiters = 0;
+
+            appData.readings.forEach(r => {
+                totalSales += parseFloat(r.total || 0);
+                totalLiters += parseFloat(r.liters || 0);
+            });
+
+            document.getElementById('stat-total-sales').innerText = totalSales.toLocaleString('ar-EG');
+            document.getElementById('stat-total-liters').innerText = totalLiters.toLocaleString('ar-EG');
+            document.getElementById('stat-pumps-count').innerText = appData.pumps.length;
+            document.getElementById('stat-workers-count').innerText = appData.workers.length;
+
+            // Render Recent Readings
+            const tbody = document.getElementById('recent-readings-tbody');
+            if (tbody) {
+                tbody.innerHTML = appData.readings.slice(-5).reverse().map(r => `
+                    <tr>
+                        <td>${r.date}</td>
+                        <td>${r.workerName}</td>
+                        <td>${r.pumpName}</td>
+                        <td>${r.liters} لتر</td>
+                        <td><strong>${parseFloat(r.total).toLocaleString('ar-EG')} ريال</strong></td>
+                    </tr>
+                `).join('') || '<tr><td colspan="5" style="text-align:center;">لا توجد قراءات مسجلة بعد</td></tr>';
+            }
+        }
+
+        // --- Pumps Management ---
+        document.getElementById('pump-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('pump-id').value || Date.now().toString();
+            const name = document.getElementById('pump-name').value;
+            const type = document.getElementById('pump-type').value;
+            const currentReading = parseFloat(document.getElementById('pump-reading').value) || 0;
+            const pricePerLiter = parseFloat(document.getElementById('pump-price').value) || 0;
+
+            const existingIdx = appData.pumps.findIndex(p => p.id === id);
+            if (existingIdx >= 0) {
+                appData.pumps[existingIdx] = { id, name, type, currentReading, pricePerLiter };
+            } else {
+                appData.pumps.push({ id, name, type, currentReading, pricePerLiter });
+            }
+
+            saveStorage();
+            this.reset();
+            document.getElementById('pump-id').value = '';
+            renderPumpsTable();
+            refreshAllDropdowns();
+            alert('تم حفظ بيانات الطرمبة بنجاح');
+        });
+
+        function renderPumpsTable() {
+            const tbody = document.getElementById('pumps-tbody');
+            tbody.innerHTML = appData.pumps.map(p => `
+                <tr>
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.type}</td>
+                    <td>${p.currentReading}</td>
+                    <td>${p.pricePerLiter} ريال</td>
+                    <td>
+                        <button class="btn btn-primary" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="editPump('${p.id}')">تعديل</button>
+                        <button class="btn btn-danger" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="deletePump('${p.id}')">حذف</button>
+                    </td>
+                </tr>
+            `).join('') || '<tr><td colspan="5" style="text-align:center;">لا توجد طرمبات مضافة</td></tr>';
+        }
+
+        function editPump(id) {
+            const pump = appData.pumps.find(p => p.id === id);
+            if (!pump) return;
+            document.getElementById('pump-id').value = pump.id;
+            document.getElementById('pump-name').value = pump.name;
+            document.getElementById('pump-type').value = pump.type;
+            document.getElementById('pump-reading').value = pump.currentReading;
+            document.getElementById('pump-price').value = pump.pricePerLiter;
+        }
+
+        function deletePump(id) {
+            if (confirm('هل أنت تأكد من حذف هذه الطرمبة؟')) {
+                appData.pumps = appData.pumps.filter(p => p.id !== id);
+                saveStorage();
+                renderPumpsTable();
+                refreshAllDropdowns();
+            }
+        }
+
+        // --- Workers Management ---
+        document.getElementById('worker-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('worker-id').value || Date.now().toString();
+            const name = document.getElementById('worker-name').value;
+            const phone = document.getElementById('worker-phone').value;
+            const pumpId = document.getElementById('worker-pump-select').value;
+
+            // Enforce Rule: 1 worker per assigned pump logic
+            const existingIdx = appData.workers.findIndex(w => w.id === id);
+            if (existingIdx >= 0) {
+                appData.workers[existingIdx] = { id, name, phone, pumpId };
+            } else {
+                appData.workers.push({ id, name, phone, pumpId });
+            }
+
+            saveStorage();
+            this.reset();
+            document.getElementById('worker-id').value = '';
+            renderWorkersTable();
+            refreshAllDropdowns();
+            alert('تم حفظ بيانات العامل بنجاح');
+        });
+
+        function renderWorkersTable() {
+            const tbody = document.getElementById('workers-tbody');
+            tbody.innerHTML = appData.workers.map(w => {
+                const pump = appData.pumps.find(p => p.id === w.pumpId);
+                return `
+                    <tr>
+                        <td><strong>${w.name}</strong></td>
+                        <td>${w.phone}</td>
+                        <td>${pump ? pump.name : '<span style="color:red">غير معين</span>'}</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="editWorker('${w.id}')">تعديل</button>
+                            <button class="btn btn-danger" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="deleteWorker('${w.id}')">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="4" style="text-align:center;">لا يوجد عمال مسجلين</td></tr>';
+        }
+
+        function editWorker(id) {
+            const worker = appData.workers.find(w => w.id === id);
+            if (!worker) return;
+            document.getElementById('worker-id').value = worker.id;
+            document.getElementById('worker-name').value = worker.name;
+            document.getElementById('worker-phone').value = worker.phone;
+            document.getElementById('worker-pump-select').value = worker.pumpId;
+        }
+
+        function deleteWorker(id) {
+            if (confirm('هل أنت متأكد من حذف هذا العامل؟')) {
+                appData.workers = appData.workers.filter(w => w.id !== id);
+                saveStorage();
+                renderWorkersTable();
+                refreshAllDropdowns();
+            }
+        }
+
+        // --- Readings & Calculation ---
+        function onWorkerSelected() {
+            const workerId = document.getElementById('reading-worker-select').value;
+            const worker = appData.workers.find(w => w.id === workerId);
+            
+            if (!worker) {
+                document.getElementById('reading-pump-name').value = '';
+                document.getElementById('reading-start').value = '';
+                document.getElementById('reading-price').value = '';
+                return;
+            }
+
+            const pump = appData.pumps.find(p => p.id === worker.pumpId);
+            if (!pump) {
+                alert('هذا العامل غير مرتبط بأي طرمبة حالياً! يرجى تعيين طرمبة له أولاً من شاشة العاملين.');
+                return;
+            }
+
+            document.getElementById('reading-pump-name').value = pump.name;
+            document.getElementById('reading-start').value = pump.currentReading;
+            document.getElementById('reading-price').value = pump.pricePerLiter;
+            calculateShiftTotals();
+        }
+
+        function calculateShiftTotals() {
+            const start = parseFloat(document.getElementById('reading-start').value) || 0;
+            const end = parseFloat(document.getElementById('reading-end').value) || 0;
+            const price = parseFloat(document.getElementById('reading-price').value) || 0;
+
+            let liters = end - start;
+            if (liters < 0) liters = 0;
+
+            const total = liters * price;
+
+            document.getElementById('reading-liters').value = liters.toFixed(2);
+            document.getElementById('reading-total').value = total.toFixed(2);
+        }
+
+        document.getElementById('reading-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const workerId = document.getElementById('reading-worker-select').value;
+            const worker = appData.workers.find(w => w.id === workerId);
+            const pump = appData.pumps.find(p => p.id === worker.pumpId);
+
+            const startReading = parseFloat(document.getElementById('reading-start').value);
+            const endReading = parseFloat(document.getElementById('reading-end').value);
+            const liters = parseFloat(document.getElementById('reading-liters').value);
+            const price = parseFloat(document.getElementById('reading-price').value);
+            const total = parseFloat(document.getElementById('reading-total').value);
+
+            if (endReading < startReading) {
+                alert('خطأ: قراءة النهاية يجب أن تكون أكبر من أو تساوي قراءة البداية!');
+                return;
+            }
+
+            // Save Shift Reading
+            const newReading = {
+                id: Date.now().toString(),
+                date: new Date().toLocaleString('ar-EG'),
+                workerId: worker.id,
+                workerName: worker.name,
+                pumpId: pump.id,
+                pumpName: pump.name,
+                startReading,
+                endReading,
+                liters,
+                price,
+                total
+            };
+
+            appData.readings.push(newReading);
+
+            // Automatically update the current reading of the assigned pump
+            pump.currentReading = endReading;
+
+            saveStorage();
+            this.reset();
+            alert('تم تسجيل قراءة العداد وتحديث العداد الحالي للطرمبة بنجاح!');
+            renderReadingsHistory();
+            renderPumpsTable();
+        });
+
+        function renderReadingsHistory() {
+            const tbody = document.getElementById('readings-history-tbody');
+            tbody.innerHTML = appData.readings.slice().reverse().map(r => `
+                <tr>
+                    <td>${r.date}</td>
+                    <td>${r.workerName}</td>
+                    <td>${r.pumpName}</td>
+                    <td>${r.startReading}</td>
+                    <td>${r.endReading}</td>
+                    <td>${r.liters}</td>
+                    <td>${r.price} ريال</td>
+                    <td><strong>${parseFloat(r.total).toLocaleString('ar-EG')} ريال</strong></td>
+                </tr>
+            `).join('') || '<tr><td colspan="8" style="text-align:center;">لا توجد قراءات مسجلة</td></tr>';
+        }
+
+        // --- Directives (حافظة التوجيهات) ---
+        document.getElementById('directive-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const workerId = document.getElementById('directive-worker-select').value;
+            const text = document.getElementById('directive-text').value;
+
+            appData.directives.push({
+                id: Date.now().toString(),
+                workerId,
+                text,
+                done: false,
+                date: new Date().toLocaleDateString('ar-EG')
+            });
+
+            saveStorage();
+            this.reset();
+            renderDirectives();
+        });
+
+        function renderDirectives() {
+            const container = document.getElementById('directives-list');
+            container.innerHTML = appData.directives.map(d => {
+                let targetWorker = 'الجميع';
+                if (d.workerId !== 'ALL') {
+                    const w = appData.workers.find(item => item.id === d.workerId);
+                    if (w) targetWorker = w.name;
+                }
+
+                return `
+                    <div class="directive-item ${d.done ? 'done' : ''}">
+                        <div>
+                            <div><strong>موجّه إلى:</strong> ${targetWorker} <small>(${d.date})</small></div>
+                            <div style="margin-top: 0.25rem;">${d.text}</div>
+                        </div>
+                        <div style="display:flex; gap:0.5rem;">
+                            <button class="btn btn-primary" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="toggleDirective('${d.id}')">
+                                ${d.done ? 'إلغاء الإنجاز' : 'تم الإنجاز'}
+                            </button>
+                            <button class="btn btn-danger" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="deleteDirective('${d.id}')">حذف</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<div style="text-align:center; padding:1rem;">لا توجد توجيهات قائمة</div>';
+        }
+
+        function toggleDirective(id) {
+            const dir = appData.directives.find(d => d.id === id);
+            if (dir) {
+                dir.done = !dir.done;
+                saveStorage();
+                renderDirectives();
+            }
+        }
+
+        function deleteDirective(id) {
+            appData.directives = appData.directives.filter(d => d.id !== id);
+            saveStorage();
+            renderDirectives();
+        }
+
+        // --- WhatsApp Report System ---
+        function generateWhatsAppReportText() {
+            const workerId = document.getElementById('report-worker-select').value;
+            const worker = appData.workers.find(w => w.id === workerId);
+            
+            if (!worker) {
+                document.getElementById('whatsapp-preview').value = 'يرجى اختيار عامل لرؤية التقرير الخاص به...';
+                return;
+            }
+
+            const pump = appData.pumps.find(p => p.id === worker.pumpId);
+            const workerReadings = appData.readings.filter(r => r.workerId === worker.id);
+            const latestReading = workerReadings.length > 0 ? workerReadings[workerReadings.length - 1] : null;
+
+            const workerDirectives = appData.directives.filter(d => d.workerId === 'ALL' || d.workerId === worker.id);
+
+            let msg = `⛽ *تقرير شفت محطة الغاز اليومي*\n`;
+            msg += `----------------------------------\n`;
+            msg += `👤 *اسم العامل:* ${worker.name}\n`;
+            msg += `📱 *رقم الهاتف:* ${worker.phone}\n`;
+            msg += `⚙️ *الطرمبة:* ${pump ? pump.name : 'غير محددة'}\n`;
+            msg += `📅 *تاريخ التقرير:* ${new Date().toLocaleDateString('ar-EG')}\n\n`;
+
+            if (latestReading) {
+                msg += `📊 *تفاصيل أحدث قراءة شفت:*\n`;
+                msg += `- قراءة البداية: ${latestReading.startReading}\n`;
+                msg += `- قراءة النهاية: ${latestReading.endReading}\n`;
+                msg += `- الكمية المباعة: ${latestReading.liters} لتر\n`;
+                msg += `- سعر اللتر: ${latestReading.price} ريال\n`;
+                msg += `- 💰 *المبلغ المستحق: ${latestReading.total} ريال*\n\n`;
+            } else {
+                msg += `⚠️ *لم يتم تسجيل قراءات شفت لهذا العامل اليوم بعد.*\n\n`;
+            }
+
+            msg += `📋 *التوجيهات والتعليمات للشيفت:* \n`;
+            if (workerDirectives.length > 0) {
+                workerDirectives.forEach((d, i) => {
+                    msg += `${i + 1}. ${d.text} [${d.done ? '✅ مكتمل' : '⏳ قيد الانتظار'}]\n`;
+                });
+            } else {
+                msg += `لا توجد توجيهات خاصة.\n`;
+            }
+
+            msg += `\n----------------------------------\n`;
+            msg += `تم استخراج التقرير آلياً عبر نظام إدارة محطة الغاز.`;
+
+            document.getElementById('whatsapp-preview').value = msg;
+        }
+
+        function sendToWhatsApp() {
+            const workerId = document.getElementById('report-worker-select').value;
+            const worker = appData.workers.find(w => w.id === workerId);
+            const message = document.getElementById('whatsapp-preview').value;
+
+            if (!workerId || !message) {
+                alert('يرجى اختيار العامل أولاً وتوليد التقرير');
+                return;
+            }
+
+            let phone = worker.phone ? worker.phone.replace(/[^0-9]/g, '') : '';
+            const encodedText = encodeURIComponent(message);
+            
+            let url = `https://api.whatsapp.com/send?text=${encodedText}`;
+            if (phone) {
+                url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodedText}`;
+            }
+
+            window.open(url, '_blank');
+        }
+
+        // --- App Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('current-date').innerText = new Date().toLocaleDateString('ar-EG', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            loadStorage();
+            refreshAllDropdowns();
+            updateDashboardStats();
+            renderPumpsTable();
+            renderWorkersTable();
+            renderReadingsHistory();
+            renderDirectives();
+        });
+    </script>
+</body>
+</html>
