@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آلة حاسبة ذكية - Smart Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1a1a2e;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        body.light-mode {
+            background: #f0f2f5;
+        }
+
+        .calculator-wrapper {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .calculator {
+            background: #2d2d44;
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            max-width: 420px;
+            transition: 0.3s;
+        }
+
+        body.light-mode .calculator {
+            background: #ffffff;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .display-section {
+            margin-bottom: 20px;
+        }
+
+        #display {
+            width: 100%;
+            height: 80px;
+            background: #1a1a2e;
+            border: none;
+            border-radius: 16px;
+            color: #fff;
+            font-size: 2.8rem;
+            text-align: left;
+            padding: 0 20px;
+            direction: ltr;
+            font-weight: 300;
+            transition: 0.3s;
+        }
+
+        body.light-mode #display {
+            background: #f8f9fa;
+            color: #1a1a2e;
+            border: 2px solid #e0e0e0;
+        }
+
+        .history-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            color: #aaa;
+            font-size: 0.85rem;
+            padding: 0 5px;
+        }
+
+        body.light-mode .history-bar {
+            color: #666;
+        }
+
+        #historyList {
+            font-size: 0.9rem;
+            color: #2ecc71;
+            max-width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+
+        .mode-toggle {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .mode-toggle:hover {
+            color: #f39c12;
+            transform: rotate(20deg);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .btn-scientific {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            height: 60px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            color: #fff;
+            background: #3d3d5c;
+        }
+
+        body.light-mode button {
+            background: #e8e8e8;
+            color: #1a1a2e;
+        }
+
+        button:hover {
+            transform: scale(0.95);
+            filter: brightness(1.2);
+        }
+
+        button:active {
+            transform: scale(0.9);
+        }
+
+        .operator {
+            background: #f39c12;
+            color: #1a1a2e;
+        }
+
+        body.light-mode .operator {
+            background: #f39c12;
+            color: #fff;
+        }
+
+        .equals {
+            background: #2ecc71;
+            color: #1a1a2e;
+            grid-column: span 2;
+        }
+
+        body.light-mode .equals {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .clear {
+            background: #e74c3c;
+        }
+
+        .function {
+            background: #8e44ad;
+            font-size: 1rem;
+        }
+
+        body.light-mode .function {
+            background: #9b59b6;
+            color: #fff;
+        }
+
+        .zero {
+            grid-column: span 2;
+        }
+
+        .history-panel {
+            background: #2d2d44;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            max-width: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+            transition: 0.3s;
+        }
+
+        body.light-mode .history-panel {
+            background: #ffffff;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .history-panel h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.light-mode .history-panel h3 {
+            color: #1a1a2e;
+        }
+
+        .history-item {
+            background: #3d3d5c;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        body.light-mode .history-item {
+            background: #f0f2f5;
+            color: #1a1a2e;
+        }
+
+        .history-item .result {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        body.light-mode .history-item .result {
+            color: #27ae60;
+        }
+
+        .history-item .delete-history {
+            background: transparent;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0 5px;
+        }
+
+        .clear-history {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        .clear-history:hover {
+            transform: scale(0.95);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Scrollbar */
+        .history-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+        .history-panel::-webkit-scrollbar-track {
+            background: #1a1a2e;
+            border-radius: 10px;
+        }
+        .history-panel::-webkit-scrollbar-thumb {
+            background: #f39c12;
+            border-radius: 10px;
+        }
+
+        body.light-mode .history-panel::-webkit-scrollbar-track {
+            background: #e0e0e0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .calculator-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            .history-panel {
+                max-width: 100%;
+                max-height: 200px;
+            }
+            button {
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            #display {
+                font-size: 2.2rem;
+                height: 65px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calculator {
+                padding: 15px;
+            }
+            button {
+                height: 45px;
+                font-size: 1rem;
+            }
+            .btn-scientific button {
+                height: 35px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-wrapper">
+        <!-- الحاسبة -->
+        <div class="calculator">
+            <div class="display-section">
+                <input type="text" id="display" readonly value="0">
+                <div class="history-bar">
+                    <span id="historyList">📜 اضغط لعرض التاريخ</span>
+                    <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+                </div>
+            </div>
+
+            <!-- الأزرار العلمية -->
+            <div class="btn-scientific" id="scientificButtons">
+                <button class="function" onclick="appendFunction('sin(')">sin</button>
+                <button class="function" onclick="appendFunction('cos(')">cos</button>
+                <button class="function" onclick="appendFunction('tan(')">tan</button>
+                <button class="function" onclick="appendFunction('log(')">log</button>
+                <button class="function" onclick="appendFunction('√(')">√</button>
+                <button class="function" onclick="appendFunction('Math.PI')">π</button>
+                <button class="function" onclick="appendFunction('Math.E')">e</button>
+                <button class="function" onclick="appendFunction('x²','²')">x²</button>
+            </div>
+
+            <!-- الأزرار الأساسية -->
+            <div class="buttons">
+                <button class="clear" onclick="clearAll()">AC</button>
+                <button class="clear" onclick="clearEntry()">CE</button>
+                <button class="operator" onclick="appendOperator('%')">%</button>
+                <button class="operator" onclick="appendOperator('÷')">÷</button>
+
+                <button onclick="appendNumber('7')">7</button>
+                <button onclick="appendNumber('8')">8</button>
+                <button onclick="appendNumber('9')">9</button>
+                <button class="operator" onclick="appendOperator('×')">×</button>
+
+                <button onclick="appendNumber('4')">4</button>
+                <button onclick="appendNumber('5')">5</button>
+                <button onclick="appendNumber('6')">6</button>
+                <button class="operator" onclick="appendOperator('-')">−</button>
+
+                <button onclick="appendNumber('1')">1</button>
+                <button onclick="appendNumber('2')">2</button>
+                <button onclick="appendNumber('3')">3</button>
+                <button class="operator" onclick="appendOperator('+')">+</button>
+
+                <button onclick="toggleSign()">±</button>
+                <button onclick="appendNumber('0')" class="zero">0</button>
+                <button onclick="appendDecimal()">.</button>
+                <button class="equals" onclick="calculate()">=</button>
+            </div>
+        </div>
+
+        <!-- لوحة التاريخ -->
+        <div class="history-panel" id="historyPanel">
+            <h3>
+                📋 التاريخ
+                <button class="clear-history" onclick="clearHistory()">مسح الكل</button>
+            </h3>
+            <div id="historyContainer">
+                <div style="color: #666; text-align: center; padding: 20px; font-size: 0.9rem;">
+                    لا توجد عمليات بعد
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============= المتغيرات العامة =============
+        let display = document.getElementById('display');
+        let currentInput = '0';
+        let pendingValue = null;
+        let pendingOperator = null;
+        let resetDisplay = false;
+        let history = JSON.parse(localStorage.getItem('calcHistory')) || [];
+        let isLightMode = localStorage.getItem('calcMode') === 'light';
+
+        // ============= التهيئة =============
+        function init() {
+            if (isLightMode) document.body.classList.add('light-mode');
+            updateDisplay();
+            renderHistory();
+            document.addEventListener('keydown', handleKeyboard);
+        }
+
+        // ============= الشاشة =============
+        function updateDisplay() {
+            display.value = currentInput;
+        }
+
+        // ============= الأرقام =============
+        function appendNumber(num) {
+            if (resetDisplay) {
+                currentInput = '';
+                resetDisplay = false;
+            }
+            if (currentInput === '0' && num !== '.') currentInput = '';
+            if (currentInput.length < 15) currentInput += num;
+            updateDisplay();
+        }
+
+        function appendDecimal() {
+            if (resetDisplay) {
+                currentInput = '0';
+                resetDisplay = false;
+            }
+            if (!currentInput.includes('.')) currentInput += '.';
+            updateDisplay();
+        }
+
+        // ============= العمليات =============
+        function appendOperator(op) {
+            if (pendingOperator !== null) calculate();
+            pendingValue = parseFloat(currentInput);
+            pendingOperator = op;
+            resetDisplay = true;
+        }
+
+        function calculate() {
+            if (pendingOperator === null) return;
+            let second = parseFloat(currentInput);
+            let result;
+            let expression = `${pendingValue} ${pendingOperator} ${second}`;
+
+            switch (pendingOperator) {
+                case '+': result = pendingValue + second; break;
+                case '-': result = pendingValue - second; break;
+                case '×': result = pendingValue * second; break;
+                case '÷': result = second !== 0 ? pendingValue / second : 'خطأ: قسمة على صفر'; break;
+                case '%': result = pendingValue % second; break;
+                default: return;
+            }
+
+            if (typeof result === 'number') {
+                result = parseFloat(result.toFixed(10));
+                addHistory(`${expression} = ${result}`);
+                currentInput = String(result);
+            } else {
+                currentInput = result;
+            }
+
+            pendingOperator = null;
+            pendingValue = null;
+            resetDisplay = true;
+            updateDisplay();
+        }
+
+        // ============= دوال علمية =============
+        function appendFunction(func, symbol = null) {
+            let value = parseFloat(currentInput);
+            let result;
+            let displaySymbol = symbol || func;
+
+            switch (func) {
+                case 'sin(':
+                    result = Math.sin(value * Math.PI / 180);
+                    addHistory(`sin(${value}) = ${result.toFixed(6)}`);
+                    break;
+                case 'cos(':
+                    result = Math.cos(value * Math.PI / 180);
+                    addHistory(`cos(${value}) = ${result.toFixed(6)}`);
+                    break;
+                case 'tan(':
+                    result = Math.tan(value * Math.PI / 180);
+                    addHistory(`tan(${value}) = ${result.toFixed(6)}`);
+                    break;
+                case 'log(':
+                    result = Math.log10(value);
+                    addHistory(`log(${value}) = ${result.toFixed(6)}`);
+                    break;
+                case '√(':
+                    result = Math.sqrt(value);
+                    addHistory(`√(${value}) = ${result.toFixed(6)}`);
+                    break;
+                case 'Math.PI':
+                    result = Math.PI;
+                    addHistory(`π = ${result}`);
+                    break;
+                case 'Math.E':
+                    result = Math.E;
+                    addHistory(`e = ${result}`);
+                    break;
+                case 'x²':
+                    result = value * value;
+                    addHistory(`(${value})² = ${result}`);
+                    break;
+                default:
+                    return;
+            }
+
+            currentInput = String(parseFloat(result.toFixed(10)));
+            resetDisplay = true;
+            updateDisplay();
+        }
+
+        // ============= إضافات =============
+        function toggleSign() {
+            if (currentInput !== '0') {
+                if (currentInput.startsWith('-')) {
+                    currentInput = currentInput.slice(1);
+                } else {
+                    currentInput = '-' + currentInput;
+                }
+                updateDisplay();
+            }
+        }
+
+        function clearAll() {
+            currentInput = '0';
+            pendingValue = null;
+            pendingOperator = null;
+            resetDisplay = false;
+            updateDisplay();
+        }
+
+        function clearEntry() {
+            currentInput = '0';
+            updateDisplay();
+        }
+
+        // ============= التاريخ =============
+        function addHistory(entry) {
+            history.unshift(entry);
+            if (history.length > 15) history.pop();
+            localStorage.setItem('calcHistory', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyContainer');
+            if (history.length === 0) {
+                container.innerHTML = `<div style="color: #666; text-align: center; padding: 20px; font-size: 0.9rem;">لا توجد عمليات بعد</div>`;
+                return;
+            }
+            container.innerHTML = history.map((item, index) => `
+                <div class="history-item">
+                    <span>${item}</span>
+                    <button class="delete-history" onclick="deleteHistory(${index})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteHistory(index) {
+            history.splice(index, 1);
+            localStorage.setItem('calcHistory', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function clearHistory() {
+            if (confirm('هل تريد مسح كل التاريخ؟')) {
+                history = [];
+                localStorage.setItem('calcHistory', JSON.stringify(history));
+                renderHistory();
+            }
+        }
+
+        // ============= لوحة المفاتيح =============
+        function handleKeyboard(e) {
+            const key = e.key;
+            if (key >= '0' && key <= '9') appendNumber(key);
+            else if (key === '.') appendDecimal();
+            else if (key === '+') appendOperator('+');
+            else if (key === '-') appendOperator('-');
+            else if (key === '*') appendOperator('×');
+            else if (key === '/') { e.preventDefault(); appendOperator('÷'); }
+            else if (key === 'Enter' || key === '=') { e.preventDefault(); calculate(); }
+            else if (key === 'Escape') clearAll();
+            else if (key === 'Backspace') { e.preventDefault(); if (currentInput.length > 1) currentInput = currentInput.slice(0, -1);
+                else currentInput = '0';
+                updateDisplay(); }
+        }
+
+        // ============= الوضع الليلي =============
+        function toggleMode() {
+            isLightMode = !isLightMode;
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('calcMode', isLightMode ? 'light' : 'dark');
+            document.querySelector('.mode-toggle').textContent = isLightMode ? '☀️' : '🌙';
+        }
+
+        // ============= عرض التاريخ =============
+        document.getElementById('historyList').addEventListener('click', function() {
+            const panel = document.getElementById('historyPanel');
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                panel.style.display = 'block';
+            } else {
+                panel.style.display = 'none';
+            }
+        });
+
+        // ============= بدء التشغيل =============
+        init();
+    </script>
+</body>
+  </html>
