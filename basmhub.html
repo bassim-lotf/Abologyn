@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="باسم هوب - منصة الأدوات والموارد الرقمية. اكتشف أفضل الأدوات والمواقع والموارد الرقمية.">
+    <meta name="author" content="باسم لطف774969589">
+    <title>باسم هوب | منصة الأدوات والموارد الرقمية</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-light: #eef2ff;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border: #334155;
+            --primary: #818cf8;
+            --primary-hover: #6366f1;
+            --primary-light: #1e1b4b;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: background var(--transition), border-color var(--transition);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+            margin-top: -2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .btn-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all var(--transition);
+        }
+
+        .btn-icon:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .badge {
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 0.7rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid var(--surface);
+        }
+
+        .email-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all var(--transition);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .email-link:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 2rem 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-box .icon {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            font-size: 1.2rem;
+        }
+
+        /* Filters */
+        .filters {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-row select {
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.9rem;
+            flex: 1;
+            min-width: 160px;
+            outline: none;
+            transition: all var(--transition);
+        }
+
+        .filter-row select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all var(--transition);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 0.5rem 0;
+        }
+
+        /* Resources Grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .resource-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1.3;
+        }
+
+        .resource-category {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .resource-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .badge-sm {
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-purple { background: #fce7f3; color: #9d174d; }
+
+        .resource-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .resource-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-fav {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            color: var(--text);
+        }
+
+        .btn-fav:hover {
+            border-color: #f59e0b;
+            background: #fef3c7;
+            color: #f59e0b;
+            transform: scale(1.1);
+        }
+
+        .btn-fav.active {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.75rem;
+            color: var(--text);
+            font-size: 1.3rem;
+        }
+
+        .empty-state p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--surface-hover);
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all var(--transition);
+        }
+
+        .modal-close:hover {
+            background: #ef4444;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 300;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: var(--surface);
+            color: var(--text);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            margin-top: 3rem;
+            background: var(--surface);
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-email {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition);
+        }
+
+        .footer-email:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-light);
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all var(--transition);
+            margin-top: 0.5rem;
+        }
+
+        .contact-email:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        /* About Section */
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .about-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.75rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-row select {
+                min-width: 100%;
+            }
+            
+            .email-link {
+                display: none;
+            }
+            
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo" onclick="navigateTo('home')" role="button" tabindex="0" aria-label="العودة للرئيسية">
+            <div class="logo-icon">ب</div>
+            <div>
+                <div class="logo-text">باسم هوب</div>
+                <div class="logo-sub">منصة الأدوات والموارد الرقمية</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="mailto:bassem774969589@gmail.com" class="email-link" title="تواصل معنا">
+                ✉️ bassem774969589@gmail.com
+            </a>
+            <button class="btn-icon" onclick="toggleTheme()" title="الوضع الليلي/النهاري" aria-label="تبديل الوضع">
+                <span id="themeIcon">🌙</span>
+            </button>
+            <button class="btn-icon" onclick="showFavorites()" title="المفضلة" aria-label="المفضلة">
+                ⭐
+                <span class="badge" id="favBadge">0</span>
+            </button>
+            <button class="btn-icon" onclick="showAbout()" title="عن المنصة" aria-label="عن المنصة">
+                ℹ️
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <div class="hero" id="heroSection">
+            <h1>كل الأدوات والموارد التي تحتاجها في مكان واحد</h1>
+            <p>اكتشف أفضل الأدوات والمواقع والموارد الرقمية، مرتبة حسب المجال والمستوى لتصل إلى ما تحتاجه بسرعة.</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث عن أداة، موقع، تقنية، أو مورد..." oninput="handleSearch(this.value)" aria-label="بحث">
+                <span class="icon">🔍</span>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters" id="filtersSection">
+            <div class="filter-row">
+                <select id="categoryFilter" onchange="applyFilters()" aria-label="تصنيف">
+                    <option value="">كل التصنيفات</option>
+                </select>
+                <select id="levelFilter" onchange="applyFilters()" aria-label="مستوى">
+                    <option value="">كل المستويات</option>
+                    <option value="beginner">🟢 مبتدئ</option>
+                    <option value="intermediate">🟡 متوسط</option>
+                    <option value="professional">🔴 محترف</option>
+                </select>
+                <select id="pricingFilter" onchange="applyFilters()" aria-label="السعر">
+                    <option value="">كل الأسعار</option>
+                    <option value="free">مجاني</option>
+                    <option value="paid">مدفوع</option>
+                    <option value="freemium">مجاني/مدفوع</option>
+                </select>
+                <select id="sortSelect" onchange="applyFilters()" aria-label="ترتيب">
+                    <option value="default">الترتيب الافتراضي</option>
+                    <option value="popular">الأكثر شعبية</option>
+                    <option value="newest">الأحدث</option>
+                    <option value="alphabetical">الأبجدي</option>
+                    <option value="featured">المميز</option>
+                </select>
+            </div>
+            <div class="filter-row">
+                <button class="btn" onclick="resetFilters()">🔄 إعادة ضبط الفلاتر</button>
+                <button class="btn" onclick="showAll()">📋 عرض الكل</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats" id="statsBar">
+            <span id="resultCount">جميع الموارد</span>
+        </div>
+
+        <!-- Resources Grid -->
+        <div id="resourcesContainer"></div>
+
+        <!-- Contact Section -->
+        <div class="contact-section" id="contactSection">
+            <h3>📬 تواصل معنا</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                هل لديك اقتراح أو تريد إضافة مورد جديد؟ راسلنا على:
+            </p>
+            <a href="mailto:bassem774969589@gmail.com" class="contact-email">
+                ✉️ bassem774969589@gmail.com
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="footer-content">
+            <p><strong>باسم هوب</strong> - منصة الأدوات والموارد الرقمية</p>
+            <p>التصميم والتطوير: باسم لطف774969589</p>
+            <p>📧 <a href="mailto:bassem774969589@gmail.com" class="footer-email">bassem774969589@gmail.com</a></p>
+            <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">© 2026 باسم هوب - جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" role="dialog" aria-modal="true">
+            <button class="modal-close" onclick="closeModal()" aria-label="إغلاق">✕</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ==================== بيانات الموارد ====================
+        const resources = [
+            // Web Development
+            { id: 1, name: "MDN Web Docs", description: "مرجع شامل لتقنيات الويب - HTML, CSS, JavaScript والمزيد من Mozilla", category: "Web Development", subcategory: "Documentation", levels: ["beginner", "intermediate", "professional"], pricing: "free", language: ["English"], tags: ["HTML", "CSS", "JavaScript", "Documentation"], url: "https://developer.mozilla.org/", featured: true, popular: true, icon: "📚", dateAdded: "2026-08-27" },
+            { id: 2, name: "W3Schools", description: "دروس تفاعلية لتطوير الويب بأمثلة عملية سهلة الفهم", category: "Web Development", subcategory: "Learning", levels: ["beginner"], pricing: "free", language: ["English"], tags: ["HTML", "CSS", "JavaScript", "Tutorials"], url: "https://www.w3schools.com/", featured: false, popular: true, icon: "🎓", dateAdded: "2026-08-26" },
+            { id: 3, name: "freeCodeCamp", description: "منصة تعليمية مجانية بالكامل لتعلم البرمجة وتطوير الويب", category: "Web Development", subcategory: "Learning", levels: ["beginner", "intermediate"], pricing: "free", language: ["English"], tags: ["Programming", "Courses", "Certification"], url: "https://www.freecodecamp.org/", featured: true, popular: true, icon: "💻", dateAdded: "2026-08-25" },
+            { id: 4, name: "React", description: "مكتبة JavaScript الأكثر شعبية لبناء واجهات المستخدم الحديثة", category: "Web Development", subcategory: "JavaScript Framework", levels: ["intermediate", "professional"], pricing: "free", language: ["English"], tags: ["React", "JavaScript", "UI", "Frontend"], url: "https://react.dev/", featured: true, popular: true, icon: "⚛️", dateAdded: "2026-08-24" },
+            { id: 5, name: "Vue.js", description: "إطار JavaScript تقدمي سهل التعلم وقوي الأداء", category: "Web Development", subcategory: "JavaScript Framework", levels: ["intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Vue", "JavaScript", "Frontend"], url: "https://vuejs.org/", featured: false, popular: true, icon: "💚", dateAdded: "2026-08-23" },
+            { id: 6, name: "Angular", description: "منصة تطوير احترافية من Google لتطبيقات الويب", category: "Web Development", subcategory: "JavaScript Framework", levels: ["professional"], pricing: "free", language: ["English"], tags: ["Angular", "TypeScript", "Google"], url: "https://angular.dev/", featured: false, popular: false, icon: "🅰️", dateAdded: "2026-08-22" },
+            { id: 7, name: "TypeScript", description: "JavaScript مع أنواع ثابتة لتطبيقات أكثر أمانًا وقابلية للصيانة", category: "Web Development", subcategory: "Programming Language", levels: ["intermediate", "professional"], pricing: "free", language: ["English"], tags: ["TypeScript", "JavaScript", "Microsoft"], url: "https://www.typescriptlang.org/", featured: true, popular: true, icon: "🔷", dateAdded: "2026-08-21" },
+            { id: 8, name: "Node.js", description: "بيئة تشغيل JavaScript على الخادم لبناء تطبيقات سريعة", category: "Web Development", subcategory: "Backend", levels: ["intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Node.js", "Backend", "Server"], url: "https://nodejs.org/", featured: true, popular: true, icon: "🟢", dateAdded: "2026-08-20" },
+            { id: 9, name: "Python", description: "لغة برمجة متعددة الاستخدامات سهلة التعلم وقوية", category: "Programming", subcategory: "Programming Language", levels: ["beginner", "intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Python", "Programming", "Data Science"], url: "https://www.python.org/", featured: true, popular: true, icon: "🐍", dateAdded: "2026-08-19" },
+            
+            // Design & UI/UX
+            { id: 10, name: "Figma", description: "أداة تصميم UI/UX تعاونية رائدة للفرق والمصممين", category: "UI/UX Design", subcategory: "Design Tool", levels: ["beginner", "intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["Design", "UI/UX", "Prototyping", "Collaboration"], url: "https://www.figma.com/", featured: true, popular: true, icon: "🎨", dateAdded: "2026-08-18" },
+            { id: 11, name: "Dribbble", description: "منصة لاكتشاف وعرض التصاميم الإبداعية الاحترافية", category: "UI/UX Design", subcategory: "Inspiration", levels: ["beginner", "intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Design", "Inspiration", "Portfolio"], url: "https://dribbble.com/", featured: false, popular: true, icon: "🏀", dateAdded: "2026-08-17" },
+            { id: 12, name: "Behance", description: "منصة Adobe لعرض واكتشاف الأعمال الإبداعية", category: "Design", subcategory: "Portfolio", levels: ["beginner", "intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Design", "Portfolio", "Adobe"], url: "https://www.behance.net/", featured: false, popular: false, icon: "🅱️", dateAdded: "2026-08-16" },
+            { id: 13, name: "Canva", description: "أداة تصميم سهلة الاستخدام لغير المصممين", category: "Design", subcategory: "Design Tool", levels: ["beginner"], pricing: "freemium", language: ["English", "Arabic"], tags: ["Design", "Templates", "Easy"], url: "https://www.canva.com/", featured: true, popular: true, icon: "🖼️", dateAdded: "2026-08-15" },
+            
+            // AI
+            { id: 14, name: "ChatGPT", description: "مساعد ذكاء اصطناعي متقدم للمحادثة والمساعدة في مختلف المهام", category: "AI", subcategory: "AI Assistant", levels: ["beginner", "intermediate", "professional"], pricing: "freemium", language: ["English", "Arabic"], tags: ["AI", "Chatbot", "Assistant", "OpenAI"], url: "https://chat.openai.com/", featured: true, popular: true, icon: "🤖", dateAdded: "2026-08-14" },
+            { id: 15, name: "Midjourney", description: "أداة توليد الصور بالذكاء الاصطناعي بجودة عالية", category: "AI", subcategory: "Image Generation", levels: ["intermediate", "professional"], pricing: "paid", language: ["English"], tags: ["AI", "Images", "Generation", "Art"], url: "https://www.midjourney.com/", featured: true, popular: true, icon: "🎭", dateAdded: "2026-08-13" },
+            { id: 16, name: "GitHub Copilot", description: "مساعد برمجة ذكي يعمل داخل محرر الكود", category: "AI", subcategory: "Coding Assistant", levels: ["intermediate", "professional"], pricing: "paid", language: ["English"], tags: ["AI", "Coding", "GitHub", "Assistant"], url: "https://github.com/features/copilot", featured: true, popular: true, icon: "👨‍💻", dateAdded: "2026-08-12" },
+            
+            // Version Control & DevOps
+            { id: 17, name: "GitHub", description: "أكبر منصة لاستضافة الأكواد والتعاون بين المطورين", category: "Git & GitHub", subcategory: "Version Control", levels: ["beginner", "intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["Git", "GitHub", "Collaboration", "Code"], url: "https://github.com/", featured: true, popular: true, icon: "🐙", dateAdded: "2026-08-11" },
+            { id: 18, name: "GitLab", description: "منصة DevOps متكاملة مع Git مدمج", category: "Git & GitHub", subcategory: "Version Control", levels: ["intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["Git", "GitLab", "DevOps", "CI/CD"], url: "https://gitlab.com/", featured: false, popular: false, icon: "🦊", dateAdded: "2026-08-10" },
+            { id: 19, name: "Docker", description: "منصة لتشغيل التطبيقات في حاويات معزولة", category: "DevOps", subcategory: "Containerization", levels: ["intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["Docker", "Container", "DevOps"], url: "https://www.docker.com/", featured: true, popular: true, icon: "🐳", dateAdded: "2026-08-09" },
+            
+            // Hosting & Cloud
+            { id: 20, name: "Vercel", description: "منصة استضافة ونشر سريعة لتطبيقات الويب الحديثة", category: "Hosting", subcategory: "Deployment", levels: ["beginner", "intermediate"], pricing: "freemium", language: ["English"], tags: ["Hosting", "Deployment", "Frontend"], url: "https://vercel.com/", featured: true, popular: true, icon: "▲", dateAdded: "2026-08-08" },
+            { id: 21, name: "Netlify", description: "منصة استضافة سهلة للمواقع والتطبيقات الساكنة", category: "Hosting", subcategory: "Deployment", levels: ["beginner", "intermediate"], pricing: "freemium", language: ["English"], tags: ["Hosting", "Static", "Deployment"], url: "https://www.netlify.com/", featured: false, popular: true, icon: "🌐", dateAdded: "2026-08-07" },
+            
+            // APIs
+            { id: 22, name: "Postman", description: "منصة شاملة لتطوير واختبار وتوثيق APIs", category: "APIs", subcategory: "API Development", levels: ["beginner", "intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["API", "Testing", "Documentation"], url: "https://www.postman.com/", featured: true, popular: true, icon: "📮", dateAdded: "2026-08-06" },
+            
+            // Backend & Databases
+            { id: 23, name: "Firebase", description: "منصة Google لتطوير التطبيقات مع قاعدة بيانات فورية", category: "Backend", subcategory: "BaaS", levels: ["beginner", "intermediate"], pricing: "freemium", language: ["English"], tags: ["Firebase", "Google", "Backend", "Database"], url: "https://firebase.google.com/", featured: true, popular: true, icon: "🔥", dateAdded: "2026-08-05" },
+            { id: 24, name: "Supabase", description: "بديل مفتوح المصدر لـ Firebase مع PostgreSQL", category: "Backend", subcategory: "BaaS", levels: ["intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["Supabase", "PostgreSQL", "Open Source"], url: "https://supabase.com/", featured: true, popular: false, icon: "⚡", dateAdded: "2026-08-04" },
+            { id: 25, name: "MongoDB", description: "قاعدة بيانات NoSQL مرنة للمستندات", category: "Databases", subcategory: "NoSQL", levels: ["intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["MongoDB", "NoSQL", "Database"], url: "https://www.mongodb.com/", featured: false, popular: true, icon: "🍃", dateAdded: "2026-08-03" },
+            
+            // Design Resources
+            { id: 26, name: "Google Fonts", description: "مكتبة خطوط مجانية عالية الجودة للويب", category: "Design Resources", subcategory: "Fonts", levels: ["beginner", "intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Fonts", "Typography", "Google"], url: "https://fonts.google.com/", featured: true, popular: true, icon: "🔤", dateAdded: "2026-08-02" },
+            { id: 27, name: "Coolors", description: "مولد لوحات ألوان احترافي وسريع", category: "Design Resources", subcategory: "Colors", levels: ["beginner", "intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["Colors", "Palette", "Design"], url: "https://coolors.co/", featured: false, popular: true, icon: "🎯", dateAdded: "2026-08-01" },
+            { id: 28, name: "Unsplash", description: "مكتبة صور مجانية عالية الجودة للاستخدام التجاري", category: "Design Resources", subcategory: "Images", levels: ["beginner", "intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Images", "Photos", "Free"], url: "https://unsplash.com/", featured: true, popular: true, icon: "📸", dateAdded: "2026-07-31" },
+            { id: 29, name: "Font Awesome", description: "مكتبة أيقونات شاملة وسهلة الاستخدام", category: "Design Resources", subcategory: "Icons", levels: ["beginner", "intermediate", "professional"], pricing: "freemium", language: ["English"], tags: ["Icons", "UI", "Web"], url: "https://fontawesome.com/", featured: true, popular: true, icon: "🔹", dateAdded: "2026-07-30" },
+            { id: 30, name: "Tailwind CSS", description: "إطار CSS حديث لبناء واجهات سريعة وقابلة للتخصيص", category: "Web Development", subcategory: "CSS Framework", levels: ["intermediate", "professional"], pricing: "free", language: ["English"], tags: ["CSS", "Tailwind", "Framework"], url: "https://tailwindcss.com/", featured: true, popular: true, icon: "🌊", dateAdded: "2026-07-29" },
+            { id: 31, name: "Bootstrap", description: "إطار CSS الأكثر شيوعًا لبناء مواقع متجاوبة", category: "Web Development", subcategory: "CSS Framework", levels: ["beginner", "intermediate"], pricing: "free", language: ["English"], tags: ["CSS", "Bootstrap", "Responsive"], url: "https://getbootstrap.com/", featured: false, popular: true, icon: "🅱️", dateAdded: "2026-07-28" },
+            { id: 32, name: "Flutter", description: "إطار Google لتطوير تطبيقات الجوال بسرعة", category: "Mobile Development", subcategory: "Framework", levels: ["intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Flutter", "Mobile", "Dart", "Google"], url: "https://flutter.dev/", featured: true, popular: true, icon: "💙", dateAdded: "2026-07-27" },
+            { id: 33, name: "React Native", description: "تطوير تطبيقات جوال أصلية باستخدام React", category: "Mobile Development", subcategory: "Framework", levels: ["intermediate", "professional"], pricing: "free", language: ["English"], tags: ["React Native", "Mobile", "JavaScript"], url: "https://reactnative.dev/", featured: true, popular: true, icon: "📱", dateAdded: "2026-07-26" },
+            { id: 34, name: "Stack Overflow", description: "أكبر مجتمع للمطورين لحل المشاكل البرمجية", category: "Community", subcategory: "Q&A", levels: ["beginner", "intermediate", "professional"], pricing: "free", language: ["English"], tags: ["Community", "Help", "Programming"], url: "https://stackoverflow.com/", featured: true, popular: true, icon: "💬", dateAdded: "2026-07-25" }
+        ];
+
+        // ==================== حالة التطبيق ====================
+        let state = {
+            view: 'home',
+            searchQuery: '',
+            category: '',
+            level: '',
+            pricing: '',
+            sort: 'default',
+            favorites: []
+        };
+
+        // ==================== التهيئة ====================
+        function initApp() {
+            try {
+                // تحميل المفضلة من localStorage
+                const savedFavorites = localStorage.getItem('basmhub_favorites');
+                if (savedFavorites) {
+                    state.favorites = JSON.parse(savedFavorites);
+                }
+                
+                // تحميل الثيم
+                const savedTheme = localStorage.getItem('basmhub_theme') || 'light';
+                applyTheme(savedTheme);
+                
+                // تهيئة التصنيفات
+                populateCategories();
+                
+                // تحديث العداد
+                updateFavBadge();
+                
+                // عرض الموارد
+                renderResources();
+                
+                console.log('🚀 باسم هوب V1.0 - تم التحميل بنجاح');
+                console.log('📊 عدد الموارد: ' + resources.length);
+                console.log('👨‍💻 تصميم وتطوير: باسم لطف774969589');
+                console.log('📧 البريد: bassem774969589@gmail.com');
+            } catch (error) {
+                console.error('خطأ في التهيئة:', error);
+            }
+        }
+
+        // ==================== التصنيفات ====================
+        function populateCategories() {
+            const select = document.getElementById('categoryFilter');
+            if (!select) return;
+            
+            const categories = [...new Set(resources.map(r => r.category))];
+            
+            select.innerHTML = '<option value="">كل التصنيفات</option>';
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                select.appendChild(option);
+            });
+        }
+
+        // ==================== الثيم ====================
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('basmhub_theme', newTheme);
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const themeIcon = document.getElementById('themeIcon');
+            if (themeIcon) {
+                themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+
+        // ==================== البحث والفلاتر ====================
+        function handleSearch(query) {
+            state.searchQuery = query;
+            state.view = 'home';
+            showHomeSections();
+            renderResources();
+        }
+
+        function applyFilters() {
+            state.category = document.getElementById('categoryFilter').value;
+            state.level = document.getElementById('levelFilter').value;
+            state.pricing = document.getElementById('pricingFilter').value;
+            state.sort = document.getElementById('sortSelect').value;
+            renderResources();
+        }
+
+        function resetFilters() {
+            state.searchQuery = '';
+            state.category = '';
+            state.level = '';
+            state.pricing = '';
+            state.sort = 'default';
+            
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('levelFilter').value = '';
+            document.getElementById('pricingFilter').value = '';
+            document.getElementById('sortSelect').value = 'default';
+            
+            renderResources();
+            showToast('تم إعادة ضبط جميع الفلاتر', '🔄');
+        }
+
+        function showAll() {
+            resetFilters();
+            showToast('تم عرض جميع الموارد', '📋');
+        }
+
+        // ==================== التنقل ====================
+        function showHomeSections() {
+            document.getElementById('heroSection').style.display = 'block';
+            document.getElementById('filtersSection').style.display = 'block';
+            document.getElementById('statsBar').style.display = 'flex';
+            document.getElementById('contactSection').style.display = 'block';
+        }
+
+        function hideHomeSections() {
+            document.getElementById('heroSection').style.display = 'none';
+            document.getElementById('filtersSection').style.display = 'none';
+            document.getElementById('statsBar').style.display = 'none';
+            document.getElementById('contactSection').style.display = 'none';
+        }
+
+        function showFavorites() {
+            state.view = 'favorites';
+            hideHomeSections();
+            renderResources();
+        }
+
+        function showAbout() {
+            state.view = 'about';
+            hideHomeSections();
+            const container = document.getElementById('resourcesContainer');
+            container.innerHTML = `
+                <div class="about-container">
+                    <h1 style="font-size:2.5rem;margin-bottom:1.5rem;text-align:center;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                        عن باسم هوب
+                    </h1>
+                    <div class="about-card">
+                        <h2 style="margin-bottom:1rem;">منصة الأدوات والموارد الرقمية</h2>
+                        <p style="color:var(--text-secondary);line-height:1.8;margin-bottom:1rem;">
+                            تهدف منصة "باسم هوب" إلى جمع أفضل الأدوات والمواقع والموارد الرقمية في مكان واحد، 
+                            لتسهيل الوصول إليها للمبتدئين والمحترفين على حد سواء.
+                        </p>
+                        <p style="color:var(--text-secondary);line-height:1.8;margin-bottom:2rem;">
+                            نقدم مجموعة شاملة من الموارد المنظمة حسب المجال والمستوى، 
+                            لتساعدك في رحلتك التقنية سواء كنت تتعلم البرمجة، 
+                            أو تطور تطبيقات، أو تصمم واجهات، أو تعمل في أي مجال رقمي آخر.
+                        </p>
+                        <div style="border-top:1px solid var(--border);padding-top:1.5rem;">
+                            <h3 style="margin-bottom:0.5rem;">تصميم وتطوير</h3>
+                            <p style="font-size:1.2rem;font-weight:bold;color:var(--primary);margin-bottom:0.5rem;">باسم لطف774969589</p>
+                            <p>
+                                <a href="mailto:bassem774969589@gmail.com" style="color:var(--primary);text-decoration:none;">
+                                    ✉️ bassem774969589@gmail.com
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="text-align:center;color:var(--text-muted);">
+                        <p>الإصدار V1.0</p>
+                        <p>© 2026 باسم هوب - جميع الحقوق محفوظة</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function navigateTo(view) {
+            if (view === 'home') {
+                state.view = 'home';
+                showHomeSections();
+                renderResources();
+            } else if (view === 'favorites') {
+                showFavorites();
+            } else if (view === 'about') {
+                showAbout();
+            }
+        }
+
+        // ==================== عرض الموارد ====================
+        function renderResources() {
+            const container = document.getElementById('resourcesContainer');
+            let filtered = [...resources];
+            
+            // البحث
+            if (state.searchQuery) {
+                const query = state.searchQuery.toLowerCase();
+                filtered = filtered.filter(r => 
+                    r.name.toLowerCase().includes(query) ||
+                    r.description.toLowerCase().includes(query) ||
+                    r.category.toLowerCase().includes(query) ||
+                    r.tags.some(tag => tag.toLowerCase().includes(query)) ||
+                    r.levels.some(level => level.includes(query)) ||
+                    r.pricing.includes(query)
+                );
+            }
+            
+            // الفلاتر
+            if (state.category) {
+                filtered = filtered.filter(r => r.category === state.category);
+            }
+            if (state.level) {
+                filtered = filtered.filter(r => r.levels.includes(state.level));
+            }
+            if (state.pricing) {
+                filtered = filtered.filter(r => r.pricing === state.pricing);
+            }
+            
+            // الترتيب
+            switch(state.sort) {
+                case 'popular':
+                    filtered.sort((a, b) => (b.popular ? 1 : 0) - (a.popular ? 1 : 0));
+                    break;
+                case 'newest':
+                    filtered.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+                    break;
+                case 'alphabetical':
+                    filtered.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'featured':
+                    filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+                    break;
+            }
+            
+            // عرض المفضلة فقط
+            if (state.view === 'favorites') {
+                filtered = filtered.filter(r => state.favorites.includes(r.id));
+            }
+            
+            // تحديث العداد
+            const countEl = document.getElementById('resultCount');
+            if (state.view === 'favorites') {
+                countEl.textContent = `عرض ${filtered.length} من الموارد المفضلة`;
+            } else {
+                countEl.textContent = `عرض ${filtered.length} من ${resources.length} مورد`;
+            }
+            
+            // عرض الموارد أو رسالة فارغة
+            if (filtered.length === 0) {
+                const isFav = state.view === 'favorites';
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">${isFav ? '⭐' : '🔍'}</div>
+                        <h3>${isFav ? 'لا توجد موارد مفضلة' : 'لا توجد نتائج مطابقة'}</h3>
+                        <p>${isFav ? 'أضف موارد للمفضلة بالضغط على ☆' : 'جرب كلمات بحث مختلفة أو أعد ضبط الفلاتر'}</p>
+                        <button class="btn btn-primary" onclick="${isFav ? "navigateTo('home')" : 'resetFilters()'}">
+                            ${isFav ? 'تصفح الموارد' : 'إعادة ضبط'}
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="resources-grid">
+                        ${filtered.map(r => createResourceCard(r)).join('')}
+                    </div>
+                `;
+                
+                // إضافة مستمعي الأحداث
+                container.querySelectorAll('.resource-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        if (!e.target.closest('.btn-fav') && !e.target.closest('a')) {
+                            openResourceModal(parseInt(card.dataset.id));
+                        }
+                    });
+                });
+                
+                container.querySelectorAll('.btn-fav').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        toggleFavorite(parseInt(btn.dataset.id));
+                    });
+                });
+            }
+        }
+
+        // ==================== إنشاء بطاقة مورد ====================
+        function createResourceCard(resource) {
+            const isFav = state.favorites.includes(resource.id);
+            
+            const levelBadges = resource.levels.map(level => {
+                if (level === 'beginner') return '<span class="badge-sm badge-green">🟢 مبتدئ</span>';
+                if (level === 'intermediate') return '<span class="badge-sm badge-yellow">🟡 متوسط</span>';
+                if (level === 'professional') return '<span class="badge-sm badge-red">🔴 محترف</span>';
+                return '';
+            }).join('');
+            
+            const pricingBadge = resource.pricing === 'free' ? 
+                '<span class="badge-sm badge-blue">مجاني</span>' : 
+                resource.pricing === 'paid' ? 
+                '<span class="badge-sm badge-purple">مدفوع</span>' : 
+                '<span class="badge-sm badge-blue">مجاني/مدفوع</span>';
+            
+            const featuredBadge = re
